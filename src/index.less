@@ -6,6 +6,7 @@
 }
 
 @appColor: rgba(0, 0, 0, 0.25);
+@navColor: darkslategrey;
 @appFont: 'arial';
 @rowHeight: minmax(100px, 100px);
 @colWidth: minmax(100px, 100px);
@@ -21,7 +22,43 @@
     height: 100vh;
 }
 
+.navBar-container {
+    display: flex;
+    flex-direction: row;
+    background-color: @navColor;
+    padding: 1rem 2rem;
+    justify-content: space-between;
+}
 
+.navBar-container-logo {
+    align-self: flex-start;
+}
+
+.navBar-container-navSection {
+  align-self: center;
+  justify-content: center;
+}
+
+.navBar-navSection-list {
+    color: cornsilk;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    display: flex;
+}
+
+.navBar-navSection-list-listItem:hover {
+  color: azure;
+}
+
+.navBar-navSection-list-listItem {
+    list-style: none;
+    margin: 0 1rem;
+    cursor: pointer;
+}
+
+.navBar-listItem-link {
+}
 /* ======================================================================================================
  * 3D Transform Notes:
  * ======================================================================================================

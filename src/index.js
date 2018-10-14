@@ -1,23 +1,64 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {computed, observable} from "mobx";
 import * as mobx from "mobx";
 import {observer} from "mobx-react";
+import logo from './assets/calvin_and_hobbes_logo.png';
 
-function App(props) {
-    return(
-        <div
-            className="app"
-            id="app"
-        >
-            <RotateYPiece />
-            <RotateXPiece />
-            <RotateCarouselPiece />
-            <CarouselButtonRight />
-            <CarouselButtonLeft />
-        </div>
-    );
+const navEnums = {
+    CAROUSEL: 0,
+    FLIP_ITEMS: 1
+};
+
+@observer
+class App extends React.Component {
+    render() {
+        return(<Fragment>
+                <NavBar />
+            {rootStore.pageStore.displayPage}
+        </Fragment>
+        );
+    }
+}
+
+class NavBar extends React.Component {
+    navigate = function(page) {
+        switch(page) {
+            case navEnums.CAROUSEL:
+                rootStore.pageStore.displayPage = rootStore.pageStore.carouselPage;
+                break;
+            case navEnums.FLIP_ITEMS:
+                rootStore.pageStore.displayPage = rootStore.pageStore.flipPage;
+                break;
+            default:
+                console.warn("oops...something went wrong with nav");
+                break;
+        }
+    };
+
+    render() {
+        return(
+            <div className="navBar-container" key="nav_container">
+                <img
+                    src={logo}
+                    alt="navLogo"
+                    className="navBar-container-logo"
+                />
+                <nav className="navBar-container-navSection">
+                    <ul className="navBar-navSection-list">
+                        <li className="navBar-navSection-list-listItem" key="nav_carousel">
+                            <div id="nav_carousel" className="navBar-listItem-link" onClick={() => {this.navigate(navEnums.CAROUSEL)}}>Carousel</div>
+                        </li>
+                        <li className="navBar-navSection-list-listItem" key="nav_flip_items">
+                            <div id="nav_flip_items" className="navBar-listItem-link" onClick={() => {this.navigate(navEnums.FLIP_ITEMS)}}>Flip Items</div>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+        );
+    }
 }
 
 class RotateYPiece extends React.Component {
@@ -25,6 +66,7 @@ class RotateYPiece extends React.Component {
         return(
             <div
                 className="rotateYPiece"
+                key="rotate_y_piece"
             >
                 <div
                     className="rotateYPiece-content"
@@ -68,6 +110,7 @@ class RotateXPiece extends React.Component {
         return(
             <div
                 className="rotateXPiece"
+                key="rotate_x_piece"
             >
                 <div
                     className="rotateXPiece-content"
@@ -112,10 +155,11 @@ class RotateCarouselPiece extends React.Component {
         return(
             <div
                 className="rotateCarouselPiece"
+                key="rotate_carousel_piece"
             >
                 <div
                     className="rotateCarouselPiece-content"
-                    style={{transform: 'rotateY(' + carouselStore.carouselAngle + 'deg)'}}
+                    style={{transform: 'rotateY(' + rootStore.carouselStore.carouselAngle + 'deg)'}}
                 >
                     <div
                         className="rotateCarouselPiece-content-one rotateCarouselPiece-content-item"
@@ -171,8 +215,8 @@ class RotateCarouselPiece extends React.Component {
 class CarouselButtonRight extends React.Component {
 
     turnCarousel() {
-        carouselStore.carouselAngle += 40;
-        console.log("%c" + carouselStore.carouselAngle, "color: firebrick");
+        rootStore.carouselStore.carouselAngle += 40;
+        console.log("%c" + rootStore.carouselStore.carouselAngle, "color: firebrick");
     }
 
 
@@ -181,6 +225,7 @@ class CarouselButtonRight extends React.Component {
             <div
                 className="turnCarouselButton-containerRight"
                 onClick={this.turnCarousel}
+                key="carousel_btn_right"
             >
                 <i className="fas fa-angle-double-right turnCarouselButton-containerRight-btnRight"></i>
             </div>
@@ -191,8 +236,8 @@ class CarouselButtonRight extends React.Component {
 class CarouselButtonLeft extends React.Component {
 
     turnCarousel() {
-        carouselStore.carouselAngle -= 40;
-        console.log("%c" + carouselStore.carouselAngle, "color: firebrick");
+        rootStore.carouselStore.carouselAngle -= 40;
+        console.log("%c" + rootStore.carouselStore.carouselAngle, "color: firebrick");
     }
 
 
@@ -201,6 +246,7 @@ class CarouselButtonLeft extends React.Component {
             <div
                 className="turnCarouselButton-containerLeft"
                 onClick={this.turnCarousel}
+                key="carousel_btn_left"
             >
                 <i className="fas fa-angle-double-left turnCarouselButton-containerLeft-btnLeft"></i>
             </div>
@@ -209,9 +255,41 @@ class CarouselButtonLeft extends React.Component {
 }
 
 class CarouselStore {
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+    }
     @observable carouselAngle = 0;
 }
 
-const carouselStore = new CarouselStore();
+class PageStore {
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+        this.carouselPage = <div
+            className="app"
+            id="app"
+        >
+            <RotateCarouselPiece />
+            <CarouselButtonRight />
+            <CarouselButtonLeft />
+        </div>;
+        this.flipPage = <div
+            className="app"
+            id="app"
+        >
+            <RotateYPiece />
+            <RotateXPiece />
+        </div>;
+    }
+    @observable displayPage = this.carouselPage;
+}
 
-ReactDOM.render(<App store={carouselStore} />, document.getElementById('root'));
+class RootStore {
+    constructor() {
+        this.carouselStore = new CarouselStore(this);
+        this.pageStore = new PageStore(this);
+    }
+}
+
+const rootStore = new RootStore();
+
+ReactDOM.render(<App store={rootStore} />, document.getElementById('root'));
