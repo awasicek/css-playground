@@ -1,0 +1,276 @@
+/*TODO refactor with less*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+.app {
+  display: grid;
+  grid-template-rows: [row1] minmax(100px, 100px) [row2] minmax(100px, 100px) [row3] minmax(100px, 100px) [row4] minmax(100px, 100px) [row5] minmax(100px, 100px) [row6] minmax(100px, 100px) [row7] minmax(100px, 100px) [row8] minmax(100px, 100px) [row9] minmax(100px, 100px) [row10] minmax(100px, 100px);
+  grid-template-columns: [col1] minmax(100px, 100px) [col2] minmax(100px, 100px) [col3] minmax(100px, 100px) [col4] minmax(100px, 100px) [col5] minmax(100px, 100px) [col6] minmax(100px, 100px) [col7] minmax(100px, 100px) [col8] minmax(100px, 100px) [col9] minmax(100px, 100px) [col10] minmax(100px, 100px);
+  grid-gap: 30px;
+  padding: 3rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+}
+/* ======================================================================================================
+ * 3D Transform Notes:
+ * ======================================================================================================
+ * 1. Rotations happen relative to the parent element (default where transform-style: flat).
+ * 2. Render nested elements independent of each other in 3d space by using transform-style: preserve-3d
+ * 3. Rotating 90 -> orthogonal to screen -> "disappears".
+ * 4. If you don't adjust depth (translate z-axis), the rotation transforms will always be "stuck"
+ *    to the original x-y plane that is rotating (think spinning a sheet of paper).
+ * 5. If an item has the backface-visibility: hidden then it won't show up when not facing the screen.
+ *    Hence, if starting backwards, it will not show until the rotation bringing it facing the screen
+ *    completes and it is facing the user again (unless you modify its depth, even slightly).
+ * ======================================================================================================
+ */
+.rotateYPiece {
+  /* need outer element for hover, otherwise, hover hit-box keeps shifting */
+  grid-row-start: row3;
+  font-size: 2rem;
+  width: 400px;
+}
+.rotateYPiece-content {
+  position: relative;
+  background: firebrick;
+  padding: 3rem;
+  text-align: center;
+  transition: 1500ms;
+  transform-style: preserve-3d;
+  /* default is flat */
+  -webkit-transform-style: preserve-3d;
+}
+.rotateYPiece:hover .rotateYPiece-content {
+  transform: rotateY(180deg);
+  /* flip to its back */
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+.rotateYPiece-content-front,
+.rotateYPiece-content-back {
+  position: absolute;
+  /* overlapping text */
+  padding: 2rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  /* flicker fix relating to shifting between 2d/3d rendering */
+  backface-visibility: hidden;
+  /* when facing back, hide */
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+.rotateYPiece-content-front {
+  transform: translateZ(100px);
+  /* adjust depth */
+  -webkit-transform: translateZ(100px);
+  -moz-transform: translateZ(100px);
+}
+.rotateYPiece-content-back {
+  transform: rotateY(180deg) translateZ(100px);
+  /* start out flipped to its back */
+  -webkit-transform: rotateY(180deg) translateZ(100px);
+  -moz-transform: rotateY(180deg) translateZ(100px);
+}
+.rotateYPiece-content-front-info,
+.rotateYPiece-content-back-info {
+  backface-visibility: hidden;
+  /* when facing back, hide */
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  font-size: 1rem;
+  transform: translateZ(-30px);
+  /* adjust depth */
+  -webkit-transform: translateZ(-30px);
+  -moz-transform: translateZ(-30px);
+}
+/*{*/
+/*transform: translateZ(-90px); !* adjust depth *!*/
+/*-webkit-transform: translateZ(-90px);*/
+/*-moz-transform: translateZ(-90px);*/
+/*}*/
+/*transform: rotate3d(90, 90, 0, 180deg);*/
+/*transform: rotateX(180deg);*/
+.rotateXPiece {
+  /* need outer element for hover, otherwise, hover hit-box keeps shifting */
+  grid-row-start: row4;
+  font-size: 2rem;
+  width: 400px;
+}
+.rotateXPiece-content {
+  position: relative;
+  padding: 3rem;
+  text-align: center;
+  transition: 1500ms;
+  transform-style: preserve-3d;
+  /* default is flat */
+  -webkit-transform-style: preserve-3d;
+}
+.rotateXPiece:hover .rotateXPiece-content {
+  transform: rotateX(180deg);
+  /* flip to its back */
+  -webkit-transform: rotateX(180deg);
+  -moz-transform: rotateX(180deg);
+}
+.rotateXPiece-content-front,
+.rotateXPiece-content-back {
+  position: absolute;
+  /* overlapping text */
+  padding: 2rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  /* flicker fix relating to shifting between 2d/3d rendering */
+  backface-visibility: hidden;
+  /* when facing back, hide */
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+.rotateXPiece-content-front {
+  background-color: lawngreen;
+  transform: translateZ(1px);
+  /* adjust depth */
+  -webkit-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+}
+.rotateXPiece-content-back {
+  background-color: seagreen;
+  transform: rotateX(180deg) translateZ(1px);
+  /* start out flipped to its back */
+  -webkit-transform: rotateX(180deg) translateZ(1px);
+  -moz-transform: rotateX(180deg) translateZ(1px);
+}
+.rotateXPiece-content-front-info,
+.rotateXPiece-content-back-info {
+  font-size: 1rem;
+}
+.rotateCarouselPiece {
+  grid-row-start: row5;
+  grid-column-start: col4;
+  width: 210px;
+  height: 140px;
+  position: relative;
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  /* show this content as if the user was X pixels farther away from it (also see perspective-origin) */
+}
+.rotateCarouselPiece-content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: 1500ms;
+  -webkit-transform-style: preserve-3d;
+}
+.rotateCarouselPiece-content-item {
+  display: flex;
+  position: absolute;
+  width: 186px;
+  height: 116px;
+  left: 10px;
+  top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  justify-content: center;
+  align-items: center;
+}
+/* 9 face carousel, so 360 / 9 = 40 degrees per item. Face of 210px with angle of 40 degrees
+ * (20 for right triangle) gives us 288px translateZ by taking tangent (see diagram in src folder).
+ */
+.rotateCarouselPiece-content-one {
+  background-color: orangered;
+  -webkit-transform: rotateY(0deg) translateZ(288px);
+  transform: rotateY(0deg) translateZ(288px);
+  -moz-transform: rotateY(0deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-two {
+  background-color: darkorange;
+  -webkit-transform: rotateY(40deg) translateZ(288px);
+  transform: rotateY(40deg) translateZ(288px);
+  -moz-transform: rotateY(40deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-three {
+  background-color: yellow;
+  -webkit-transform: rotateY(80deg) translateZ(288px);
+  transform: rotateY(80deg) translateZ(288px);
+  -moz-transform: rotateY(80deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-four {
+  background-color: lawngreen;
+  -webkit-transform: rotateY(120deg) translateZ(288px);
+  transform: rotateY(120deg) translateZ(288px);
+  -moz-transform: rotateY(120deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-five {
+  background-color: deepskyblue;
+  -webkit-transform: rotateY(160deg) translateZ(288px);
+  transform: rotateY(160deg) translateZ(288px);
+  -moz-transform: rotateY(160deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-six {
+  background-color: blue;
+  -webkit-transform: rotateY(200deg) translateZ(288px);
+  transform: rotateY(200deg) translateZ(288px);
+  -moz-transform: rotateY(200deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-seven {
+  background-color: indigo;
+  -webkit-transform: rotateY(240deg) translateZ(288px);
+  transform: rotateY(240deg) translateZ(288px);
+  -moz-transform: rotateY(240deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-eight {
+  background-color: darkviolet;
+  -webkit-transform: rotateY(280deg) translateZ(288px);
+  transform: rotateY(280deg) translateZ(288px);
+  -moz-transform: rotateY(280deg) translateZ(288px);
+}
+.rotateCarouselPiece-content-nine {
+  background-color: red;
+  -webkit-transform: rotateY(320deg) translateZ(288px);
+  transform: rotateY(320deg) translateZ(288px);
+  -moz-transform: rotateY(320deg) translateZ(288px);
+}
+.turnCarouselButton-containerLeft {
+  grid-row-start: row5;
+  grid-column-start: col2;
+  position: relative;
+}
+.turnCarouselButton-containerRight {
+  grid-row-start: row5;
+  grid-column-start: col9;
+  position: relative;
+}
+.turnCarouselButton-containerLeft-btnLeft {
+  position: absolute;
+  left: -15px;
+  top: 60px;
+  transform: scale(2);
+  transition: transform 250ms ease-in-out;
+  cursor: pointer;
+  color: black;
+}
+.turnCarouselButton-containerRight-btnRight {
+  position: absolute;
+  left: -190px;
+  top: 60px;
+  transform: scale(2);
+  transition: transform 250ms ease-in-out;
+  cursor: pointer;
+}
+.turnCarouselButton-containerLeft-btnLeft:hover,
+.turnCarouselButton-containerRight-btnRight:hover {
+  transform: scale(2.5);
+}
+/*# sourceMappingURL=index.css.map */

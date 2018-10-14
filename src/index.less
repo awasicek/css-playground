@@ -6,13 +6,19 @@
 }
 
 @appColor: rgba(0, 0, 0, 0.25);
+@appFont: 'arial';
+@rowHeight: minmax(100px, 100px);
+@colWidth: minmax(100px, 100px);
 
 .app {
     display: grid;
-    grid-template-rows: [row1] 100px [row2] 100px [row3] 100px [row4] 100px [row5] 100px [row6] 100px [row7] 100px;
-    grid-template-columns: [col1] 100px [col2] 100px [col3] 100px [col4] 100px [col5] 100px [col6] 100px [col7] 100px;
+    grid-template-rows: [row1] @rowHeight [row2] @rowHeight [row3] @rowHeight [row4] @rowHeight [row5] @rowHeight [row6] @rowHeight [row7] @rowHeight [row8] @rowHeight [row9] @rowHeight [row10] @rowHeight;
+    grid-template-columns: [col1] @colWidth [col2] @colWidth [col3] @colWidth [col4] @colWidth [col5] @colWidth [col6] @colWidth [col7] @colWidth [col8] @colWidth [col9] @colWidth [col10] @colWidth;
     grid-gap: 30px;
-    background-color: @{appColor};
+    padding: 3rem;
+    background-color: @appColor;
+    width: 100vw;
+    height: 100vh;
 }
 
 
@@ -109,7 +115,6 @@
 
 .rotateXPiece-content {
     position: relative;
-    background: firebrick;
     padding: 3rem;
     text-align: center;
     transition: 1500ms;
@@ -139,12 +144,14 @@
 }
 
 .rotateXPiece-content-front {
+    background-color: lawngreen;
     transform: translateZ(1px); /* adjust depth */
     -webkit-transform: translateZ(1px);
     -moz-transform: translateZ(1px);
 }
 
 .rotateXPiece-content-back {
+    background-color: seagreen;
     transform: rotateX(180deg) translateZ(1px); /* start out flipped to its back */
     -webkit-transform: rotateX(180deg) translateZ(1px);
     -moz-transform: rotateX(180deg) translateZ(1px);
@@ -267,7 +274,7 @@
 }
 .turnCarouselButton-containerRight {
     grid-row-start: row5;
-    grid-column-start: col8;
+    grid-column-start: col9;
     position: relative;
 }
 
@@ -283,7 +290,7 @@
 
 .turnCarouselButton-containerRight-btnRight {
     position: absolute;
-    left: -125px;
+    left: -190px;
     top: 60px;
     transform: scale(2);
     transition: transform 250ms ease-in-out;
